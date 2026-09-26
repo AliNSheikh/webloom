@@ -45,11 +45,11 @@ export const CategoriesListPage: React.FC = () => {
       </div>
 
       {/* Header Banner */}
-      <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-rose-950 via-slate-900 to-rose-950 text-white p-8 sm:p-12 shadow-xl border border-rose-900/40">
+      <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-emerald-950 via-slate-900 to-emerald-950 text-white p-8 sm:p-12 shadow-xl border border-emerald-900/40">
         <div className="relative z-10 max-w-2xl space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/20 text-rose-300 text-xs font-bold border border-rose-400/30">
-            <Sparkles className="w-3.5 h-3.5 text-rose-400" />
-            <span>{isAr ? 'دليل تصنيفات زهور حماة' : 'Floral Categories Guide'}</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-900/60 text-amber-300 text-xs font-bold border border-emerald-500/30">
+            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+            <span>{isAr ? 'دليل تصنيفات وي بلووم' : 'Webloom Collections Guide'}</span>
           </div>
 
           <h1 className="text-2xl sm:text-4xl font-extrabold font-serif tracking-tight">
@@ -64,7 +64,7 @@ export const CategoriesListPage: React.FC = () => {
         </div>
 
         <div className="absolute left-8 bottom-0 translate-y-1/4 opacity-10 pointer-events-none hidden lg:block">
-          <FolderTree className="w-80 h-80 text-rose-300" />
+          <FolderTree className="w-80 h-80 text-emerald-300" />
         </div>
       </div>
 

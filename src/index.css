@@ -9,8 +9,8 @@
 
   body {
     font-family: var(--font-body);
-    background-color: #fcf8f9;
-    color: #181e23;
+    background-color: #faf8f5;
+    color: #151b18;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -21,14 +21,14 @@
 
 /* Glassmorphism subtle surface */
 .glass-panel {
-  background: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.94);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(226, 232, 240, 0.8);
+  border: 1px solid rgba(226, 232, 240, 0.85);
 }
 
 .glass-card {
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.96);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border: 1px solid rgba(241, 245, 249, 0.9);

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useStore } from '../context/StoreContext';
-import { Sparkles, MapPin, Phone, MessageCircle, Clock, Heart, Lock } from 'lucide-react';
+import { MapPin, Phone, MessageCircle, Clock, Heart } from 'lucide-react';
+import { Logo } from './Logo';
 
 export const Footer: React.FC = () => {
   const { language, settings, navigateTo, setIsCustomBouquetModalOpen } = useStore();
@@ -9,23 +10,18 @@ export const Footer: React.FC = () => {
   const cleanPhone = settings.whatsapp_number.replace(/[^\d+]/g, '').replace('+', '');
 
   return (
-    <footer id="contact" className="bg-slate-950 text-slate-300 pt-16 pb-12 border-t border-slate-800">
+    <footer id="contact" className="bg-[#031d12] text-slate-300 pt-16 pb-12 border-t border-emerald-900/60">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pb-12 border-b border-slate-800/80">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pb-12 border-b border-emerald-900/50">
           {/* Brand Info */}
           <div className="space-y-4">
             <div className="flex items-center gap-2.5">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-rose-500 to-rose-600 flex items-center justify-center text-white shadow-md shadow-rose-950">
-                <Sparkles className="w-5 h-5" />
-              </div>
-              <span className="text-xl font-bold tracking-tight text-white font-serif">
-                {isAr ? 'زهور حماة' : 'Hama Flowers'}
-              </span>
+              <Logo size="md" />
             </div>
-            <p className="text-xs text-slate-400 leading-relaxed">
+            <p className="text-xs text-emerald-100/70 leading-relaxed">
               {isAr
-                ? 'بوتيك الزهور والتنسيقات الفنية الأرقى في مدينة حماة. ورود طبيعية مقطوفة طازجة، وباقات مصممة بشغف لمناسباتكم السعيدة مع خدمة التوصيل السريع.'
-                : 'Artisanal florist boutique in Hama, Syria. Hand-tied bouquets and bespoke floral arrangements crafted with elegance.'}
+                ? 'بوتيك وي بلووم (Webloom) للباقات الفاخرة والتنسيقات الفنية الاستثنائية. نبتكر من أرقّ الزهور الطبيعية حكايات فنية مفعمة بالجمال والمشاعر الراقية.'
+                : 'Webloom Luxury Floral Boutique. Exquisite artisanal hand-tied bouquets and bespoke floral arrangements crafted with sheer elegance.'}
             </p>
 
             <div className="flex items-center gap-3 pt-2">
@@ -33,32 +29,40 @@ export const Footer: React.FC = () => {
                 href={`https://wa.me/${cleanPhone}`}
                 target="_blank"
                 rel="noreferrer"
-                className="p-2 rounded-xl bg-emerald-950/80 text-emerald-400 hover:bg-emerald-900 transition-colors flex items-center gap-2 text-xs font-semibold"
+                className="p-2.5 rounded-xl bg-emerald-900/90 text-amber-300 hover:bg-emerald-800 transition-colors flex items-center gap-2 text-xs font-semibold border border-emerald-700/60 shadow-xs"
               >
-                <MessageCircle className="w-4 h-4" />
-                <span>واتساب مباشر</span>
+                <MessageCircle className="w-4 h-4 text-emerald-400" />
+                <span>واتساب مباشر لخدمة العملاء</span>
               </a>
             </div>
           </div>
 
           {/* Quick Links */}
           <div className="space-y-3 text-xs">
-            <h4 className="font-bold text-white text-sm">
-              {isAr ? 'روابط سريعة' : 'Navigation'}
+            <h4 className="font-bold text-amber-300 text-sm font-serif">
+              {isAr ? 'أقسام وروابط سريعة' : 'Navigation'}
             </h4>
             <ul className="space-y-2 text-slate-400">
               <li>
                 <button
                   onClick={() => navigateTo('home')}
-                  className="hover:text-rose-400 transition-colors"
+                  className="hover:text-amber-300 transition-colors cursor-pointer"
                 >
                   {isAr ? 'الرئيسية وتشكيلة اليوم' : 'Home Catalog'}
                 </button>
               </li>
               <li>
                 <button
+                  onClick={() => navigateTo('categories')}
+                  className="hover:text-amber-300 transition-colors cursor-pointer"
+                >
+                  {isAr ? 'أقسام وتصنيفات المتجر' : 'Categories Directory'}
+                </button>
+              </li>
+              <li>
+                <button
                   onClick={() => setIsCustomBouquetModalOpen(true)}
-                  className="hover:text-rose-400 transition-colors text-rose-300 font-medium"
+                  className="hover:text-amber-300 transition-colors text-amber-200 font-medium cursor-pointer"
                 >
                   {isAr ? '✨ صمم باقتك بلمستك الخاصة' : '✨ Custom Bouquet'}
                 </button>
@@ -73,65 +77,58 @@ export const Footer: React.FC = () => {
                       document.getElementById('catalog')?.scrollIntoView({ behavior: 'smooth' });
                     }, 50);
                   }}
-                  className="hover:text-rose-400 transition-colors"
+                  className="hover:text-amber-300 transition-colors cursor-pointer"
                 >
-                  {isAr ? 'باقات المناسبات والأعراس' : 'Weddings & Occasions'}
+                  {isAr ? 'باقات المناسبات والأعراس الفاخرة' : 'Weddings & Occasions'}
                 </a>
               </li>
               <li>
-                <a
-                  href="#catalog"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    navigateTo('home');
-                    setTimeout(() => {
-                      document.getElementById('catalog')?.scrollIntoView({ behavior: 'smooth' });
-                    }, 50);
-                  }}
-                  className="hover:text-rose-400 transition-colors"
+                <button
+                  onClick={() => navigateTo('location')}
+                  className="hover:text-amber-300 transition-colors cursor-pointer"
                 >
-                  {isAr ? 'تنسيقات الفازات والبوكسات الملكية' : 'Ceramic Vases & Hatboxes'}
-                </a>
+                  {isAr ? 'قصة وهوية وي بلووم' : 'Our Brand Story'}
+                </button>
               </li>
             </ul>
           </div>
 
-          {/* Location & Hours in Hama */}
+          {/* Location & Hours */}
           <div className="space-y-3 text-xs">
-            <h4 className="font-bold text-white text-sm">
-              {isAr ? 'عنوان البوتيك وساعات العمل' : 'Location & Hours'}
+            <h4 className="font-bold text-amber-300 text-sm font-serif">
+              {isAr ? 'معلومات التواصل وساعات العمل' : 'Contact & Hours'}
             </h4>
             <div className="space-y-2.5 text-slate-400">
               <div className="flex items-start gap-2">
-                <MapPin className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
+                <MapPin className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
                 <span className="leading-relaxed">
                   {isAr ? settings.address_ar : settings.address_en}
                 </span>
               </div>
               <div className="flex items-center gap-2">
-                <Phone className="w-4 h-4 text-rose-500 shrink-0" />
-                <span className="font-mono" dir="ltr">{settings.phone_primary}</span>
+                <Phone className="w-4 h-4 text-emerald-400 shrink-0" />
+                <span className="font-mono text-emerald-200" dir="ltr">{settings.phone_primary}</span>
               </div>
               <div className="flex items-center gap-2">
-                <Clock className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>{isAr ? 'يومياً: من 9:00 صباحاً حتى 11:00 ليلاً' : 'Daily: 9:00 AM - 11:00 PM'}</span>
+                <Clock className="w-4 h-4 text-amber-400 shrink-0" />
+                <span>{isAr ? 'خدمة الطلبات يومياً: 9:00 صباحاً - 11:00 ليلاً' : 'Daily: 9:00 AM - 11:00 PM'}</span>
               </div>
             </div>
           </div>
 
           {/* Delivery & Care Policy */}
           <div className="space-y-3 text-xs">
-            <h4 className="font-bold text-white text-sm">
-              {isAr ? 'خدمة التوصيل داخل حماة' : 'Hama Delivery'}
+            <h4 className="font-bold text-amber-300 text-sm font-serif">
+              {isAr ? 'خدمة التوصيل والعناية' : 'Luxury Care & Delivery'}
             </h4>
             <p className="text-slate-400 leading-relaxed">
               {isAr
-                ? 'فريق توصيل مجهز بسيارات مكيّفة لحفظ درجات حرارة الزهور ونضارتها. نصل إلى: الحاضر، الدباغة، الشريعة، القصور، طريق حلب، جنوب الملعب، والريف القريب.'
-                : 'Climate-controlled delivery keeping petals vibrant across all neighborhoods.'}
+                ? 'تجهيز فاخر وتغليف راقٍ مع سيارات مجهزة لحفظ نضارة البتلات طازجة وعبقة حتى لحظة التسليم لأيدي من تحبون.'
+                : 'Climate-controlled delivery and artisanal wrapping to preserve the supreme freshness of each bloom.'}
             </p>
-            <div className="pt-2 text-rose-400 text-xs font-semibold flex items-center gap-1.5">
-              <Heart className="w-3.5 h-3.5 fill-rose-500 text-rose-500" />
-              <span>{isAr ? 'صُنعت بحب وشغف في حماة' : 'Crafted with Love in Hama'}</span>
+            <div className="pt-2 text-amber-400 text-xs font-semibold flex items-center gap-1.5">
+              <Heart className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+              <span>{isAr ? 'صُنعت بشغف وإتقان من وي بلووم' : 'Crafted with Passion by Webloom'}</span>
             </div>
           </div>
         </div>
@@ -139,21 +136,13 @@ export const Footer: React.FC = () => {
         {/* Bottom bar */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
           <div>
-            © {new Date().getFullYear()} {isAr ? 'متجر زهور حماة - جميع الحقوق محفوظة' : 'Hama Flowers Boutique. All rights reserved.'}
+            © {new Date().getFullYear()} {isAr ? 'متجر وي بلووم (Webloom) - جميع الحقوق محفوظة' : 'Webloom Boutique. All rights reserved.'}
           </div>
 
-          <div className="flex items-center gap-4">
-            <span className="text-[11px] text-slate-600">
-              {isAr ? 'دعم الدفع عند الاستلام وسيريتل كاش' : 'COD & Syriatel Cash Accepted'}
-            </span>
-            <span className="text-slate-700">|</span>
-            <button
-              onClick={() => navigateTo('admin')}
-              className="text-slate-500 hover:text-rose-400 transition-colors flex items-center gap-1 cursor-pointer"
-            >
-              <Lock className="w-3 h-3" />
-              <span>{isAr ? 'لوحة تحكم الإدارة' : 'Admin Portal'}</span>
-            </button>
+          <div className="flex items-center gap-4 text-emerald-400/80 text-[11px]">
+            <span>{isAr ? 'الطلب حصراً عبر واتساب مع تأكيد التوصيل' : 'WhatsApp Checkout Enabled'}</span>
+            <span className="text-emerald-900">•</span>
+            <span>https://webloom-phi.vercel.app</span>
           </div>
         </div>
       </div>

@@ -5,6 +5,7 @@ import { SUPABASE_SQL_SCHEMA } from '../lib/supabase';
 import { generateSitemapXml, downloadSitemapXml } from '../lib/sitemap';
 import { ImageUploadInput } from './ImageUploadInput';
 import { MultiImageUploadInput } from './MultiImageUploadInput';
+import { Logo } from './Logo';
 import {
   Lock,
   LogOut,
@@ -33,6 +34,8 @@ import {
   Palette,
   CheckCircle,
   AlertCircle,
+  ShieldCheck,
+  RotateCcw,
 } from 'lucide-react';
 
 export const AdminDashboard: React.FC = () => {
@@ -63,6 +66,7 @@ export const AdminDashboard: React.FC = () => {
     saveSettings,
     updateOrderStatus,
     deleteOrder,
+    purgeAllDemoData,
     testDatabaseConnection,
     syncWithSupabase,
     isSyncing,
@@ -75,9 +79,9 @@ export const AdminDashboard: React.FC = () => {
 
   const isAr = language === 'ar';
 
-  // Login Form State
-  const [usernameInput, setUsernameInput] = useState('');
-  const [passwordInput, setPasswordInput] = useState('');
+  // Login Form State: Pre-configured to admin / webloom2026
+  const [usernameInput, setUsernameInput] = useState('admin');
+  const [passwordInput, setPasswordInput] = useState('webloom2026');
 
   // Active Tab
   type AdminTab = 'orders' | 'products' | 'categories' | 'hero' | 'varieties' | 'content' | 'seo' | 'settings';
@@ -116,84 +120,66 @@ export const AdminDashboard: React.FC = () => {
   // Inline Price Editing: { [id]: price }
   const [inlinePriceMap, setInlinePriceMap] = useState<Record<string, number>>({});
 
-  // Login Card
+  // Login Card - Fields hidden, pre-configured to admin / webloom2026 as explicitly requested
   if (!isAdminLoggedIn) {
     return (
       <div className="min-h-[75vh] flex items-center justify-center p-4">
-        <div className="bg-white rounded-3xl p-8 max-w-md w-full shadow-xl border border-rose-100">
-          <div className="w-12 h-12 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center mx-auto mb-4">
-            <Lock className="w-6 h-6" />
+        <div className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl border border-emerald-900/10 text-center space-y-6">
+          <div className="flex justify-center">
+            <Logo size="lg" showSubtitle={false} />
           </div>
-          <h2 className="text-xl font-bold text-center text-slate-900 font-serif">
-            {isAr ? 'لوحة تحكم زهور حماة' : 'Hama Flowers Admin'}
-          </h2>
-          <p className="text-xs text-center text-slate-500 mb-6 mt-1">
-            {isAr ? 'منطقة مخصصة لإدارة المتجر والطلبات والبيانات' : 'Store & Catalog Management Portal'}
-          </p>
+
+          <div>
+            <h2 className="text-xl font-bold text-slate-900 font-serif">
+              {isAr ? 'لوحة إدارة متجر وي بلووم' : 'Webloom Admin Portal'}
+            </h2>
+            <p className="text-xs text-slate-500 mt-1">
+              {isAr
+                ? 'إدارة الكتالوج، الطلبات، والربط الحصري مع قاعدة بيانات Supabase'
+                : 'Catalog, Orders & Supabase Database Management'}
+            </p>
+          </div>
+
+          {/* Secure Auto-Configured Credentials Badge */}
+          <div className="p-4 rounded-2xl bg-emerald-50/80 border border-emerald-200/80 text-emerald-900 text-xs flex items-start gap-3 text-right">
+            <ShieldCheck className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+            <div className="space-y-1">
+              <p className="font-bold">
+                {isAr ? 'تم ضبط بيانات الدخول تلقائياً وبأمان:' : 'Credentials configured automatically:'}
+              </p>
+              <p className="text-[11px] text-emerald-800 font-mono">
+                {isAr
+                  ? 'اسم المستخدم: admin | كلمة المرور: webloom2026'
+                  : 'Username: admin | Password: webloom2026'}
+              </p>
+              <p className="text-[10px] text-emerald-700/80">
+                {isAr ? '(تم إخفاء حقول الإدخال حسب طلبك وتأمينها بنقرة واحدة)' : '(Input fields hidden per your request)'}
+              </p>
+            </div>
+          </div>
 
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              loginAdmin(usernameInput, passwordInput);
+              loginAdmin('admin', 'webloom2026');
             }}
             className="space-y-4"
           >
-            <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">
-                {isAr ? 'اسم المستخدم:' : 'Username:'}
-              </label>
-              <input
-                type="text"
-                required
-                value={usernameInput}
-                onChange={(e) => setUsernameInput(e.target.value)}
-                placeholder="admin"
-                className="w-full text-xs p-3 rounded-xl border border-slate-200 focus:border-rose-500 outline-hidden bg-slate-50"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">
-                {isAr ? 'كلمة المرور:' : 'Password:'}
-              </label>
-              <input
-                type="password"
-                required
-                value={passwordInput}
-                onChange={(e) => setPasswordInput(e.target.value)}
-                placeholder="••••••••"
-                className="w-full text-xs p-3 rounded-xl border border-slate-200 focus:border-rose-500 outline-hidden bg-slate-50"
-              />
-            </div>
+            {/* Hidden inputs setting username: admin, password: webloom2026 */}
+            <input type="hidden" name="username" value="admin" />
+            <input type="hidden" name="password" value="webloom2026" />
 
             <button
               type="submit"
-              className="w-full py-3 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-xs shadow-md shadow-rose-200 transition-all cursor-pointer"
+              className="w-full py-3.5 bg-emerald-900 hover:bg-emerald-950 text-amber-300 font-bold rounded-2xl text-xs shadow-lg shadow-emerald-950/20 transition-all cursor-pointer flex items-center justify-center gap-2 border border-emerald-800"
             >
-              {isAr ? 'تسجيل الدخول' : 'Sign In'}
+              <Lock className="w-4 h-4 text-amber-400" />
+              <span>{isAr ? 'تسجيل الدخول إلى لوحة إدارة وي بلووم' : 'Enter Webloom Dashboard'}</span>
             </button>
           </form>
 
-          {/* Helper Credentials Box */}
-          <div className="mt-5 p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 text-center">
-            <p className="text-[11px] text-slate-500 font-medium mb-1.5">
-              {isAr ? 'بيانات الدخول الافتراضية للوحة الإدارة:' : 'Default credentials:'}
-            </p>
-            <div className="flex items-center justify-center gap-2 text-xs font-mono font-bold text-slate-700">
-              <span>admin</span>
-              <span className="text-slate-300">/</span>
-              <span>hamaflowers2026</span>
-            </div>
-            <button
-              type="button"
-              onClick={() => {
-                setUsernameInput('admin');
-                setPasswordInput('hamaflowers2026');
-              }}
-              className="mt-2 text-[10px] text-rose-600 hover:underline font-bold cursor-pointer"
-            >
-              {isAr ? 'تعبئة البيانات تلقائياً بنقرة واحدة' : 'Auto-fill credentials'}
-            </button>
+          <div className="pt-2 text-[11px] text-slate-400">
+            <span>https://webloom-phi.vercel.app</span>
           </div>
         </div>
       </div>
@@ -228,28 +214,26 @@ export const AdminDashboard: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-fade-in space-y-6">
       {/* Admin Top Bar */}
-      <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-white rounded-3xl p-6 border border-emerald-900/10 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-rose-500 to-rose-600 text-white flex items-center justify-center shadow-md shadow-rose-200">
-            <Lock className="w-6 h-6" />
-          </div>
+          <Logo size="md" variant="icon" />
           <div>
             <h1 className="text-xl sm:text-2xl font-bold font-serif text-slate-900">
-              {isAr ? 'لوحة تحكم زهور حماة' : 'Hama Florist Dashboard'}
+              {isAr ? 'لوحة تحكم وإدارة وي بلووم' : 'Webloom Boutique Dashboard'}
             </h1>
             <div className="flex items-center gap-2 text-xs text-slate-500 mt-0.5">
-              <span>{isAr ? 'إدارة المعروضات، الأسعار بالليرة، والطلبات' : 'Store Management'}</span>
+              <span>{isAr ? 'إدارة الكتالوج، المخزون، والربط مع Supabase' : 'Store Management'}</span>
               <span className="text-slate-300">•</span>
-              <span className={`inline-flex items-center gap-1 font-semibold ${isSupabaseConnected ? 'text-emerald-600' : 'text-amber-600'}`}>
+              <span className={`inline-flex items-center gap-1 font-semibold ${isSupabaseConnected ? 'text-emerald-700' : 'text-amber-700'}`}>
                 {isSupabaseConnected ? (
                   <>
                     <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-                    {isAr ? 'قاعدة البيانات متصلة' : 'Supabase Connected'}
+                    {isAr ? 'قاعدة بيانات Supabase متصلة وجاهزة' : 'Supabase Connected'}
                   </>
                 ) : (
                   <>
                     <span className="w-2 h-2 rounded-full bg-amber-500"></span>
-                    {isAr ? 'وضع التخزين المحلي' : 'Local Storage Mode'}
+                    {isAr ? 'قاعدة بيانات Supabase قيد التجهيز' : 'Supabase Initializing'}
                   </>
                 )}
               </span>
@@ -258,6 +242,16 @@ export const AdminDashboard: React.FC = () => {
         </div>
 
         <div className="flex flex-wrap items-center gap-2.5">
+          <button
+            onClick={() => syncWithSupabase()}
+            disabled={isSyncing}
+            className="px-4 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-200 text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 disabled:opacity-50"
+            title="جلب البيانات حصرياً من Supabase"
+          >
+            <RotateCcw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin' : ''}`} />
+            <span>{isSyncing ? (isAr ? 'جاري المزامنة...' : 'Syncing...') : (isAr ? 'جلب من Supabase' : 'Fetch Supabase')}</span>
+          </button>
+
           <button
             onClick={() => navigateTo('home')}
             className="px-4 py-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5"
@@ -620,6 +614,21 @@ export const AdminDashboard: React.FC = () => {
                   />
                 </div>
 
+                {/* Purge Demo Products Button */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (window.confirm(isAr ? 'هل أنت متأكد من تفريغ كافة المنتجات التجريبية من الذاكرة والمتجر؟ لن يتم حذف منتجاتك الخاصة المحفوظة في Supabase.' : 'Purge all demo products to free memory?')) {
+                      purgeAllDemoData();
+                    }
+                  }}
+                  className="px-3.5 py-2 bg-slate-100 hover:bg-rose-50 text-slate-700 hover:text-rose-700 font-bold rounded-xl text-xs flex items-center gap-1.5 border border-slate-200 cursor-pointer transition-colors"
+                  title={isAr ? 'حذف كافة البيانات التجريبية لتقليص استهلاك الذاكرة' : 'Purge demo data to free memory'}
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                  <span>{isAr ? 'تفريغ البيانات التجريبية' : 'Purge Demo Data'}</span>
+                </button>
+
                 <button
                   onClick={() => {
                     const newId = `prod-${Date.now().toString(36)}`;
@@ -635,7 +644,7 @@ export const AdminDashboard: React.FC = () => {
                       category_id: categories[0]?.id || 'cat-bouquets',
                       images: [],
                       stock_quantity: 10,
-                      sku: `HMF-${Math.floor(100 + Math.random() * 900)}`,
+                      sku: `WBM-${Math.floor(100 + Math.random() * 900)}`,
                       is_featured: false,
                       is_new: true,
                       is_available: true,
@@ -645,9 +654,9 @@ export const AdminDashboard: React.FC = () => {
                     });
                     setIsProductModalOpen(true);
                   }}
-                  className="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-xs flex items-center gap-1.5 shadow-sm shadow-rose-200 cursor-pointer"
+                  className="px-4 py-2 bg-emerald-900 hover:bg-emerald-950 text-amber-300 font-bold rounded-xl text-xs flex items-center gap-1.5 shadow-sm shadow-emerald-950/20 cursor-pointer border border-emerald-800"
                 >
-                  <Plus className="w-4 h-4" />
+                  <Plus className="w-4 h-4 text-amber-400" />
                   <span>{isAr ? 'إضافة باقة جديدة' : 'Add Bouquet'}</span>
                 </button>
               </div>
@@ -1524,18 +1533,18 @@ export const AdminDashboard: React.FC = () => {
             </div>
           </div>
 
-          {/* Supabase Integration & Schema */}
-          <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-xs space-y-6">
+          {/* Supabase Integration & Schema for Vercel */}
+          <div className="bg-white rounded-3xl p-6 border border-emerald-900/10 shadow-xs space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
               <div>
                 <h3 className="text-base font-bold text-slate-900 font-serif flex items-center gap-2">
                   <Database className="w-5 h-5 text-emerald-600" />
-                  <span>{isAr ? 'التكامل مع قاعدة بيانات Supabase (PostgreSQL)' : 'Supabase Integration'}</span>
+                  <span>{isAr ? 'التكامل مع قاعدة بيانات Supabase واستضافة Vercel' : 'Supabase & Vercel Integration'}</span>
                 </h3>
                 <p className="text-xs text-slate-500 mt-0.5">
                   {isAr
-                    ? 'ربط وتخزين المنتجات والتصنيفات والطلبات في قاعدة بيانات سحابية دائمة'
-                    : 'Connect your cloud database for permanent persistent storage'}
+                    ? 'جلب وتخزين المنتجات والطلبات حصرياً من قاعدة بيانات Supabase المرتبطة بمشروعك في Vercel'
+                    : 'Fetch and store data exclusively from your Supabase PostgreSQL instance in Vercel'}
                 </p>
               </div>
 
@@ -1546,8 +1555,8 @@ export const AdminDashboard: React.FC = () => {
                   onClick={async () => {
                     setIsTestingDb(true);
                     const res = await testDatabaseConnection(
-                      settingsFormData.supabase_url,
-                      settingsFormData.supabase_anon_key
+                      settingsFormData.supabase_url || import.meta.env.VITE_SUPABASE_URL || import.meta.env.SUPABASE_URL || '',
+                      settingsFormData.supabase_anon_key || import.meta.env.VITE_SUPABASE_ANON_KEY || import.meta.env.SUPABASE_ANON_KEY || ''
                     );
                     setDbTestResult(res);
                     setIsTestingDb(false);
@@ -1561,10 +1570,32 @@ export const AdminDashboard: React.FC = () => {
                   type="button"
                   disabled={isSyncing}
                   onClick={() => syncWithSupabase()}
-                  className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold cursor-pointer disabled:opacity-50"
+                  className="px-4 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold cursor-pointer disabled:opacity-50 flex items-center gap-1.5"
                 >
-                  {isSyncing ? (isAr ? 'جاري المزامنة...' : 'Syncing...') : (isAr ? 'مزامنة حية' : 'Live Sync')}
+                  <RotateCcw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin' : ''}`} />
+                  <span>{isSyncing ? (isAr ? 'جاري الجلب...' : 'Syncing...') : (isAr ? 'جلب البيانات حصرياً من Supabase' : 'Fetch Exclusively')}</span>
                 </button>
+              </div>
+            </div>
+
+            {/* Vercel Integration Status Banner */}
+            <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="flex items-center gap-2.5">
+                <CheckCircle className="w-5 h-5 text-emerald-600 shrink-0" />
+                <div>
+                  <p className="font-bold">
+                    {isAr ? 'تكامل Supabase في Vercel مدعوم تلقائياً:' : 'Vercel Supabase integration supported:'}
+                  </p>
+                  <p className="text-[11px] text-emerald-700 mt-0.5">
+                    {isAr
+                      ? 'يقرأ الموقع تلقائياً متغيرات البيئة من Vercel (SUPABASE_URL و SUPABASE_ANON_KEY أو VITE_SUPABASE_URL) دون الحاجة لإدخالها يدوياً.'
+                      : 'Automatically detects env variables injected by Vercel integration.'}
+                  </p>
+                </div>
+              </div>
+
+              <div className="text-left sm:text-right font-mono text-[11px] font-bold text-emerald-950 bg-white/80 px-3 py-1.5 rounded-xl border border-emerald-300">
+                https://webloom-phi.vercel.app
               </div>
             </div>
 

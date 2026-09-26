@@ -58,7 +58,7 @@ export const HeroSlider: React.FC = () => {
           }}
         />
         {/* Anti-AI Slop Scrim: 3-Stop Gradient Overlay to guarantee high text contrast */}
-        <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-950/70 to-rose-950/40"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-950/75 to-emerald-950/50"></div>
         <div className="absolute inset-0 bg-radial-at-c from-transparent via-slate-950/40 to-slate-950/80"></div>
       </div>
 
@@ -67,8 +67,8 @@ export const HeroSlider: React.FC = () => {
         <div className="max-w-2xl">
           {/* Badge */}
           {(currentSlide.badge_ar || currentSlide.badge_en) && (
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-rose-200 text-xs font-semibold mb-4 animate-fade-in shadow-xs">
-              <Sparkles className="w-3.5 h-3.5 text-rose-300" />
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-950/80 backdrop-blur-md border border-emerald-500/30 text-amber-300 text-xs font-semibold mb-4 animate-fade-in shadow-xs">
+              <Sparkles className="w-3.5 h-3.5 text-amber-400" />
               <span>{isAr ? currentSlide.badge_ar : currentSlide.badge_en}</span>
             </div>
           )}
@@ -87,7 +87,7 @@ export const HeroSlider: React.FC = () => {
           <div className="flex flex-wrap items-center gap-3">
             <button
               onClick={handleCtaClick}
-              className="px-6 py-3.5 bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white rounded-xl text-sm font-bold shadow-lg shadow-rose-900/40 hover:shadow-xl hover:scale-102 active:scale-98 transition-all flex items-center gap-2 cursor-pointer"
+              className="px-6 py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 rounded-xl text-sm font-black shadow-lg shadow-amber-950/30 hover:shadow-xl hover:scale-102 active:scale-98 transition-all flex items-center gap-2 cursor-pointer"
             >
               <span>{isAr ? (currentSlide.cta_text_ar || 'تصفح الباقات') : (currentSlide.cta_text_en || 'Explore Bouquets')}</span>
               {isAr ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
@@ -95,9 +95,9 @@ export const HeroSlider: React.FC = () => {
 
             <button
               onClick={() => setIsCustomBouquetModalOpen(true)}
-              className="px-5 py-3.5 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/25 text-white rounded-xl text-sm font-bold transition-all flex items-center gap-2 cursor-pointer hover:border-white/40"
+              className="px-5 py-3.5 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-amber-400/30 text-amber-200 rounded-xl text-sm font-bold transition-all flex items-center gap-2 cursor-pointer hover:border-amber-400/50"
             >
-              <Sparkles className="w-4 h-4 text-rose-300" />
+              <Sparkles className="w-4 h-4 text-amber-400" />
               <span>{isAr ? 'صمّم باقتك بلمستك' : 'Custom Bouquet'}</span>
             </button>
           </div>

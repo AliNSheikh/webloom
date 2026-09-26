@@ -24,9 +24,9 @@ export const StorySection: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           {/* Left Text Narrative */}
           <div className="lg:col-span-6 space-y-6">
-            <div className="inline-flex items-center gap-2 text-rose-700 font-bold text-xs uppercase tracking-wider">
-              <Sparkles className="w-4 h-4 text-rose-500" />
-              <span>{isAr ? 'عراقة حموية وأناقة عالمية' : 'Hama Heritage & Floral Elegance'}</span>
+            <div className="inline-flex items-center gap-2 text-emerald-800 font-bold text-xs uppercase tracking-wider">
+              <Sparkles className="w-4 h-4 text-amber-500" />
+              <span>{isAr ? 'إبداع فني وأناقة استثنائية - وي بلووم' : 'Floral Elegance by Webloom'}</span>
             </div>
 
             <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 leading-tight font-serif text-balance">
@@ -39,14 +39,14 @@ export const StorySection: React.FC = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
               <div className="p-4 rounded-2xl bg-white border border-slate-200/70 shadow-2xs">
-                <div className="w-8 h-8 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center mb-2">
+                <div className="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center mb-2">
                   <Flower2 className="w-4 h-4" />
                 </div>
                 <h4 className="font-bold text-slate-900 text-sm mb-1">
                   {isAr ? 'قطاف يومي نخب أول' : 'Daily Prime Harvest'}
                 </h4>
                 <p className="text-xs text-slate-500 leading-relaxed">
-                  {isAr ? 'ورود طبيعية منتقاة بعناية لتدوم نضرة لأكثر من 7 أيام.' : 'Handpicked daily for exceptional vase longevity.'}
+                  {isAr ? 'ورود طبيعية منتقاة بعناية لتدوم نضرة لأطول فترة ممكنة.' : 'Handpicked daily for exceptional vase longevity.'}
                 </p>
               </div>
 
@@ -55,10 +55,10 @@ export const StorySection: React.FC = () => {
                   <Award className="w-4 h-4" />
                 </div>
                 <h4 className="font-bold text-slate-900 text-sm mb-1">
-                  {isAr ? 'خط عربي يدوي مجاناً' : 'Handwritten Calligraphy'}
+                  {isAr ? 'خط عربي يدوي مع كل باقة' : 'Handwritten Calligraphy'}
                 </h4>
                 <p className="text-xs text-slate-500 leading-relaxed">
-                  {isAr ? 'تدوين رسائل الإهداء بخط الرقعة والديواني مع كل باقة.' : 'Custom Arabic calligraphy cards accompanying every order.'}
+                  {isAr ? 'تدوين بطاقات الإهداء بلمسة كلاسيكية فاخرة مع كل طلب.' : 'Custom calligraphy cards accompanying every order.'}
                 </p>
               </div>
             </div>
@@ -66,9 +66,9 @@ export const StorySection: React.FC = () => {
             <div className="pt-2 flex flex-wrap items-center gap-3">
               <button
                 onClick={() => setIsCustomBouquetModalOpen(true)}
-                className="px-6 py-3 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-xs sm:text-sm shadow-md transition-all cursor-pointer flex items-center gap-2"
+                className="px-6 py-3 bg-emerald-900 hover:bg-emerald-950 text-amber-300 font-bold rounded-xl text-xs sm:text-sm shadow-md transition-all cursor-pointer flex items-center gap-2 border border-emerald-800"
               >
-                <Sparkles className="w-4 h-4 text-rose-200" />
+                <Sparkles className="w-4 h-4 text-amber-400" />
                 <span>{isAr ? 'صمم باقة مخصصة لمناسبتك القادمة' : 'Design Your Custom Bouquet'}</span>
               </button>
 
@@ -97,33 +97,33 @@ export const StorySection: React.FC = () => {
                   />
                 </div>
                 <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-2xs text-xs">
-                  <div className="font-extrabold text-2xl text-rose-600 tabular-nums mb-1 font-serif">
+                  <div className="font-extrabold text-2xl text-emerald-900 tabular-nums mb-1 font-serif">
                     100%
                   </div>
                   <div className="font-bold text-slate-800 mb-0.5">
                     {isAr ? 'ضمان نضارة الأزهار' : 'Freshness Guarantee'}
                   </div>
                   <div className="text-slate-500">
-                    {isAr ? 'عناية وترطيب فوري حتى باب المستلم في حماة' : 'Immediate hydration until delivery'}
+                    {isAr ? 'عناية وترطيب فوري حتى باب المستلم' : 'Immediate hydration until delivery'}
                   </div>
                 </div>
               </div>
 
               <div className="space-y-4 pt-8">
-                <div className="p-5 rounded-2xl bg-gradient-to-br from-rose-600 to-rose-700 text-white shadow-md text-xs">
-                  <Heart className="w-5 h-5 text-rose-200 mb-2" />
-                  <div className="font-extrabold text-xl mb-1">
+                <div className="p-5 rounded-2xl bg-gradient-to-br from-emerald-900 to-emerald-950 text-white shadow-md text-xs border border-emerald-800">
+                  <Heart className="w-5 h-5 text-amber-400 mb-2" />
+                  <div className="font-extrabold text-xl mb-1 text-amber-300">
                     {isAr ? '+12,000 ابتسامة' : '+12,000 Smiles'}
                   </div>
-                  <div className="text-rose-100">
-                    {isAr ? 'شاركنا أهالي حماة أفراحهم ومناسباتهم الغالية' : 'Proudly serving Hama with floral joy'}
+                  <div className="text-emerald-100">
+                    {isAr ? 'شاركنا أحبتنا أبهى لحظاتهم ومناسباتهم الغالية مع وي بلووم' : 'Proudly serving with floral elegance'}
                   </div>
                 </div>
 
                 <div className="rounded-2xl overflow-hidden shadow-md aspect-4/3 bg-stone-200">
                   <img
                     src="https://images.unsplash.com/photo-1582794543139-8ac9cb0f7b11?auto=format&fit=crop&w=800&q=80"
-                    alt="Hama Blossoms"
+                    alt="Webloom Blossoms"
                     referrerPolicy="no-referrer"
                     className="w-full h-full object-cover"
                   />
@@ -137,12 +137,12 @@ export const StorySection: React.FC = () => {
         <div className="bg-white rounded-3xl p-6 sm:p-8 lg:p-10 border border-slate-200/80 shadow-sm space-y-8">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-6">
             <div>
-              <div className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 uppercase tracking-wider mb-1">
+              <div className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-800 uppercase tracking-wider mb-1">
                 <MapPin className="w-4 h-4 text-emerald-600" />
                 <span>{isAr ? 'الموقع الفعلي للمتجر والمعرض' : 'Physical Store & Showroom'}</span>
               </div>
               <h3 className="text-2xl font-bold font-serif text-slate-900">
-                {isAr ? 'زيارة بوتيك زهور حماة' : 'Visit Our Boutique in Hama'}
+                {isAr ? 'زيارة بوتيك وي بلووم (Webloom)' : 'Visit Webloom Boutique'}
               </h3>
               <p className="text-xs sm:text-sm text-slate-500 mt-1">
                 {address}
@@ -153,9 +153,9 @@ export const StorySection: React.FC = () => {
               href={googleMapsDirectionsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-all shadow-sm shrink-0 cursor-pointer"
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-emerald-900 hover:bg-emerald-950 text-amber-300 text-xs font-bold transition-all shadow-sm shrink-0 cursor-pointer border border-emerald-800"
             >
-              <ExternalLink className="w-4 h-4" />
+              <ExternalLink className="w-4 h-4 text-amber-400" />
               <span>{isAr ? 'فتح في خرائط Google والتوجيه' : 'Open in Google Maps'}</span>
             </a>
           </div>
@@ -165,11 +165,11 @@ export const StorySection: React.FC = () => {
             <div className="space-y-4">
               <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80">
                 <div className="flex items-center gap-3 mb-2">
-                  <div className="w-8 h-8 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center shrink-0">
+                  <div className="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
                     <MapPin className="w-4 h-4" />
                   </div>
                   <h4 className="font-bold text-xs text-slate-900">
-                    {isAr ? 'العنوان في حماة' : 'Address in Hama'}
+                    {isAr ? 'عنوان البوتيك' : 'Boutique Address'}
                   </h4>
                 </div>
                 <p className="text-xs text-slate-600 leading-relaxed font-medium">
@@ -179,7 +179,7 @@ export const StorySection: React.FC = () => {
 
               <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80">
                 <div className="flex items-center gap-3 mb-2">
-                  <div className="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
+                  <div className="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
                     <Clock className="w-4 h-4" />
                   </div>
                   <h4 className="font-bold text-xs text-slate-900">
@@ -193,7 +193,7 @@ export const StorySection: React.FC = () => {
 
               <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80">
                 <div className="flex items-center gap-3 mb-2">
-                  <div className="w-8 h-8 rounded-xl bg-sky-100 text-sky-600 flex items-center justify-center shrink-0">
+                  <div className="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0">
                     <Phone className="w-4 h-4" />
                   </div>
                   <h4 className="font-bold text-xs text-slate-900">
@@ -209,7 +209,7 @@ export const StorySection: React.FC = () => {
             {/* Embedded Google Map */}
             <div className="lg:col-span-2 rounded-2xl overflow-hidden border border-slate-200 shadow-sm relative min-h-[320px] bg-slate-100">
               <iframe
-                title="Google Maps Location - Hama Flowers Boutique"
+                title="Google Maps Location - Webloom Boutique"
                 src={mapEmbedUrl}
                 width="100%"
                 height="100%"

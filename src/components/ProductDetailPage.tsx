@@ -353,7 +353,7 @@ export const ProductDetailPage: React.FC = () => {
                 <span className="font-mono tracking-wider">{activeProduct.sku}</span>
                 <span className="text-emerald-700 font-semibold flex items-center gap-1">
                   <Check className="w-3.5 h-3.5" />
-                  {isAr ? 'متوفرة للتجهيز والتسليم في حماة' : 'Available for delivery in Hama'}
+                  {isAr ? 'متوفرة للتجهيز والتسليم الفوري' : 'Available for immediate delivery'}
                 </span>
               </div>
 
@@ -363,7 +363,7 @@ export const ProductDetailPage: React.FC = () => {
 
               {/* Price display in Syrian Lira exclusively */}
               <div className="flex items-baseline gap-3 mb-4">
-                <span className="text-3xl font-extrabold text-rose-700 tabular-nums">
+                <span className="text-3xl font-extrabold text-emerald-900 tabular-nums">
                   {formatPrice(activeProduct.price)}
                 </span>
                 {activeProduct.has_discount && activeProduct.compare_at_price && (
@@ -382,14 +382,14 @@ export const ProductDetailPage: React.FC = () => {
             <div className="space-y-2 pt-4 border-t border-slate-100">
               <label className="text-xs font-bold text-slate-900 flex items-center justify-between">
                 <span>{isAr ? 'نص كرت الإهداء (اختياري):' : 'Gift Card Message (Optional):'}</span>
-                <span className="text-[10px] text-rose-600 font-semibold">{isAr ? 'مجاناً مع الباقة' : 'Free with order'}</span>
+                <span className="text-[10px] text-amber-700 font-semibold">{isAr ? 'مجاناً مع الباقة' : 'Free with order'}</span>
               </label>
               <textarea
                 value={cardMessage}
                 onChange={(e) => setCardMessage(e.target.value)}
                 placeholder={isAr ? 'اكتب عبارة التهنئة أو الإهداء التي ترغب بتضمينها داخل كرت الهدية...' : 'Write your greeting or message for the recipient...'}
                 rows={3}
-                className="w-full text-xs p-3 rounded-xl border border-slate-200 focus:border-rose-500 focus:ring-1 focus:ring-rose-500 outline-hidden resize-none bg-slate-50/70"
+                className="w-full text-xs p-3 rounded-xl border border-slate-200 focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 outline-hidden resize-none bg-slate-50/70"
               />
             </div>
 
@@ -420,7 +420,7 @@ export const ProductDetailPage: React.FC = () => {
 
               <div className="text-right">
                 <div className="text-[11px] text-slate-400">{isAr ? 'المجموع الإجمالي:' : 'Subtotal:'}</div>
-                <div className="text-xl font-extrabold text-rose-700 tabular-nums">
+                <div className="text-xl font-extrabold text-emerald-900 tabular-nums">
                   {formatPrice(totalItemPrice)}
                 </div>
               </div>
@@ -430,18 +430,18 @@ export const ProductDetailPage: React.FC = () => {
             <div className="space-y-3 pt-2">
               <button
                 onClick={handleWhatsAppOrder}
-                className="w-full py-3.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-sm shadow-md shadow-emerald-200 flex items-center justify-center gap-2 cursor-pointer transition-all"
+                className="w-full py-3.5 px-4 bg-emerald-700 hover:bg-emerald-800 text-white font-bold rounded-xl text-sm shadow-md shadow-emerald-700/20 flex items-center justify-center gap-2 cursor-pointer transition-all"
               >
-                <MessageCircle className="w-5 h-5" />
-                <span>{isAr ? 'طلب مباشر وتأكيد عبر واتساب' : 'Direct Order via WhatsApp'}</span>
+                <MessageCircle className="w-5 h-5 text-emerald-200" />
+                <span>{isAr ? 'طلب وتأكيد فوري عبر واتساب' : 'Direct Order via WhatsApp'}</span>
               </button>
 
               <div className="flex items-center gap-2">
                 <button
                   onClick={handleAddToCart}
-                  className="flex-1 py-3 px-4 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-xs sm:text-sm shadow-sm shadow-rose-200 flex items-center justify-center gap-2 cursor-pointer transition-all"
+                  className="flex-1 py-3 px-4 bg-emerald-900 hover:bg-emerald-950 text-amber-300 font-bold rounded-xl text-xs sm:text-sm shadow-sm shadow-emerald-950/20 flex items-center justify-center gap-2 cursor-pointer transition-all border border-emerald-800"
                 >
-                  <ShoppingBag className="w-4 h-4" />
+                  <ShoppingBag className="w-4 h-4 text-amber-400" />
                   <span>{isAr ? 'إضافة إلى سلة الشراء' : 'Add to Bag'}</span>
                 </button>
 

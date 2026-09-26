@@ -175,7 +175,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             </div>
 
             {/* Title */}
-            <h3 className="font-bold text-slate-900 text-xs sm:text-base leading-snug group-hover:text-rose-600 transition-colors line-clamp-2 sm:line-clamp-1">
+            <h3 className="font-bold text-slate-900 text-xs sm:text-base leading-snug group-hover:text-emerald-800 transition-colors line-clamp-2 sm:line-clamp-1">
               {isAr ? product.title_ar : product.title_en}
             </h3>
 
@@ -214,7 +214,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               {/* WhatsApp Quick Order */}
               <button
                 onClick={handleQuickWhatsApp}
-                className="flex items-center justify-center gap-1 sm:gap-1.5 py-1.5 sm:py-2 px-1.5 sm:px-3 bg-emerald-50 text-emerald-800 hover:bg-emerald-600 hover:text-white rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-semibold transition-all border border-emerald-200/80 cursor-pointer"
+                className="flex items-center justify-center gap-1 sm:gap-1.5 py-1.5 sm:py-2 px-1.5 sm:px-3 bg-emerald-50 text-emerald-800 hover:bg-emerald-700 hover:text-white rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-semibold transition-all border border-emerald-200/80 cursor-pointer"
                 title={isAr ? 'طلب فوري ومباشر عبر واتساب' : 'Order via WhatsApp'}
               >
                 <MessageCircle className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" />
@@ -225,9 +225,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               <button
                 onClick={handleQuickAddToCart}
                 disabled={product.stock_quantity <= 0}
-                className="flex items-center justify-center gap-1 sm:gap-1.5 py-1.5 sm:py-2 px-1.5 sm:px-3 bg-rose-600 hover:bg-rose-700 disabled:bg-slate-200 text-white rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-semibold transition-all shadow-xs shadow-rose-200 cursor-pointer"
+                className="flex items-center justify-center gap-1 sm:gap-1.5 py-1.5 sm:py-2 px-1.5 sm:px-3 bg-emerald-900 hover:bg-emerald-950 disabled:bg-slate-200 text-amber-300 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-bold transition-all shadow-xs shadow-emerald-950/20 cursor-pointer"
               >
-                <ShoppingBag className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" />
+                <ShoppingBag className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0 text-amber-400" />
                 <span className="truncate">{isAr ? 'السلة' : 'Bag'}</span>
               </button>
             </div>

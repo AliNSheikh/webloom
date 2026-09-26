@@ -388,8 +388,8 @@ export const CartDrawer: React.FC = () => {
 
                 <p className="text-[11px] text-center text-slate-500 leading-normal bg-emerald-50/60 p-2.5 rounded-xl border border-emerald-100">
                   {isAr
-                    ? '✨ يتم حفظ وتوثيق طلبك تلقائياً في سجلات النظام وفتح تطبيق واتساب فوراً لإتمام التوصيل والتأكيد مع فريق زهور حماة.'
-                    : '✨ Your order is permanently logged in system records and WhatsApp is opened to finalize delivery.'}
+                    ? '✨ يتم حفظ وتوثيق طلبك تلقائياً في سجلات النظام وفتح تطبيق واتساب فوراً لإتمام التوصيل والتأكيد مع فريق متجر وي بلووم.'
+                    : '✨ Your order is permanently logged in system records and WhatsApp is opened to finalize delivery with Webloom.'}
                 </p>
 
                 <button

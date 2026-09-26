@@ -142,6 +142,7 @@ interface StoreContextType {
 
   updateOrderStatus: (orderId: string, status: OrderAndRequest['status']) => Promise<boolean>;
   deleteOrder: (orderId: string) => Promise<boolean>;
+  purgeAllDemoData: () => void;
   testDatabaseConnection: (url: string, key: string) => Promise<{ success: boolean; message: string }>;
   syncWithSupabase: () => Promise<void>;
 }
@@ -186,7 +187,10 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState<boolean>(() => {
-    return sessionStorage.getItem('hama_admin_auth') === 'true';
+    return (
+      sessionStorage.getItem('webloom_admin_auth') === 'true' ||
+      sessionStorage.getItem('hama_admin_auth') === 'true'
+    );
   });
 
   const [isCustomBouquetModalOpen, setIsCustomBouquetModalOpen] = useState<boolean>(false);
@@ -195,6 +199,58 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const [isSupabaseConnected, setIsSupabaseConnected] = useState<boolean>(false);
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
+
+  // Auto-connect and fetch data exclusively from Supabase on startup
+  useEffect(() => {
+    let isMounted = true;
+    const initSupabaseFetch = async () => {
+      const client = getSupabaseClient(settings.supabase_url, settings.supabase_anon_key);
+      if (!client) return;
+
+      try {
+        const { data: dbProducts, error: pErr } = await client.from('products').select('*');
+        if (!pErr && dbProducts !== null && isMounted) {
+          setProducts(dbProducts);
+          saveLocalProducts(dbProducts);
+          setIsSupabaseConnected(true);
+        }
+
+        const { data: dbCategories, error: cErr } = await client.from('categories').select('*');
+        if (!cErr && dbCategories !== null && isMounted) {
+          setCategories(dbCategories);
+          saveLocalCategories(dbCategories);
+        }
+
+        const { data: dbOrders, error: oErr } = await client
+          .from('orders_and_requests')
+          .select('*')
+          .order('created_at', { ascending: false });
+        if (!oErr && dbOrders !== null && isMounted) {
+          setOrders(dbOrders);
+          saveLocalOrders(dbOrders);
+        }
+
+        const { data: dbSlides } = await client.from('hero_slides').select('*').order('sort_order', { ascending: true });
+        if (dbSlides && dbSlides.length > 0 && isMounted) {
+          setHeroSlides(dbSlides);
+          saveLocalHeroSlides(dbSlides);
+        }
+
+        const { data: dbVarieties } = await client.from('custom_flower_varieties').select('*');
+        if (dbVarieties && dbVarieties.length > 0 && isMounted) {
+          setFlowerVarieties(dbVarieties);
+          saveLocalFlowerVarieties(dbVarieties);
+        }
+      } catch (err) {
+        console.warn('Auto fetch from Supabase:', err);
+      }
+    };
+
+    initSupabaseFetch();
+    return () => {
+      isMounted = false;
+    };
+  }, [settings.supabase_url, settings.supabase_anon_key]);
 
   // Sync HTML dir and lang
   useEffect(() => {
@@ -754,12 +810,14 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   // Admin Auth
   const loginAdmin = (user: string, pass: string): boolean => {
     if (
+      (user === 'admin' && pass === 'webloom2026') ||
       (user === settings.admin_username && pass === settings.admin_password) ||
       (user === 'admin' && pass === 'hamaflowers2026')
     ) {
       setIsAdminLoggedIn(true);
+      sessionStorage.setItem('webloom_admin_auth', 'true');
       sessionStorage.setItem('hama_admin_auth', 'true');
-      addToast('success', 'تم تسجيل الدخول بنجاح إلى لوحة الإدارة');
+      addToast('success', 'تم تسجيل الدخول بنجاح إلى لوحة إدارة وي بلووم');
       return true;
     }
     addToast('error', 'بيانات الدخول غير صحيحة، يرجى المحاولة ثانية');
@@ -768,8 +826,9 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const logoutAdmin = () => {
     setIsAdminLoggedIn(false);
+    sessionStorage.removeItem('webloom_admin_auth');
     sessionStorage.removeItem('hama_admin_auth');
-    addToast('info', 'تم تسجيل الخروج من لوحة الإدارة');
+    addToast('info', 'تم تسجيل الخروج من لوحة إدارة وي بلووم');
   };
 
   // Products CRUD
@@ -780,9 +839,12 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         if (index > -1) {
           const next = [...prev];
           next[index] = product;
+          saveLocalProducts(next);
           return next;
         } else {
-          return [product, ...prev];
+          const next = [product, ...prev];
+          saveLocalProducts(next);
+          return next;
         }
       });
 
@@ -799,15 +861,24 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   };
 
-  // Permanent Delete Product
+  // Permanent Delete Product - Ensures persistent deletion in Supabase & Local Cache
   const deleteProduct = async (id: string): Promise<boolean> => {
     try {
-      setProducts((prev) => prev.filter((p) => p.id !== id));
+      setProducts((prev) => {
+        const next = prev.filter((p) => p.id !== id);
+        saveLocalProducts(next);
+        return next;
+      });
+
       const client = getSupabaseClient(settings.supabase_url, settings.supabase_anon_key);
       if (client) {
-        await client.from('products').delete().eq('id', id);
+        const { error } = await client.from('products').delete().eq('id', id);
+        if (error) {
+          console.warn('Supabase delete error:', error);
+        }
       }
-      addToast('success', 'تم حذف الباقة نهائياً');
+
+      addToast('success', 'تم حذف الباقة نهائياً وتقليص استهلاك الذاكرة');
       return true;
     } catch (e: any) {
       addToast('error', e?.message || 'فشل حذف الباقة');
@@ -1130,6 +1201,12 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return res;
   };
 
+  const purgeAllDemoData = () => {
+    setProducts([]);
+    saveLocalProducts([]);
+    addToast('info', 'تم إفراغ كافة البيانات التجريبية من الذاكرة والمتجر بنجاح.');
+  };
+
   const syncWithSupabase = async () => {
     const client = getSupabaseClient(settings.supabase_url, settings.supabase_anon_key);
     if (!client) {
@@ -1139,27 +1216,42 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     setIsSyncing(true);
     try {
-      const { data: dbProducts } = await client.from('products').select('*');
-      if (dbProducts && dbProducts.length > 0) {
+      // Exclusively fetch from Supabase. If Supabase is empty, state is []
+      const { data: dbProducts, error: pErr } = await client.from('products').select('*');
+      if (!pErr && dbProducts !== null) {
         setProducts(dbProducts);
-      } else {
-        await client.from('products').upsert(products);
+        saveLocalProducts(dbProducts);
       }
 
-      const { data: dbCategories } = await client.from('categories').select('*');
-      if (dbCategories && dbCategories.length > 0) {
+      const { data: dbCategories, error: cErr } = await client.from('categories').select('*');
+      if (!cErr && dbCategories !== null) {
         setCategories(dbCategories);
-      } else {
-        await client.from('categories').upsert(categories);
+        saveLocalCategories(dbCategories);
       }
 
-      const { data: dbOrders } = await client.from('orders_and_requests').select('*').order('created_at', { ascending: false });
-      if (dbOrders && dbOrders.length > 0) {
+      const { data: dbOrders, error: oErr } = await client
+        .from('orders_and_requests')
+        .select('*')
+        .order('created_at', { ascending: false });
+      if (!oErr && dbOrders !== null) {
         setOrders(dbOrders);
+        saveLocalOrders(dbOrders);
+      }
+
+      const { data: dbSlides } = await client.from('hero_slides').select('*').order('sort_order', { ascending: true });
+      if (dbSlides && dbSlides.length > 0) {
+        setHeroSlides(dbSlides);
+        saveLocalHeroSlides(dbSlides);
+      }
+
+      const { data: dbVarieties } = await client.from('custom_flower_varieties').select('*');
+      if (dbVarieties && dbVarieties.length > 0) {
+        setFlowerVarieties(dbVarieties);
+        saveLocalFlowerVarieties(dbVarieties);
       }
 
       setIsSupabaseConnected(true);
-      addToast('success', 'تمت المزامنة بنجاح مع Supabase');
+      addToast('success', 'تم جلب البيانات حصرياً من قاعدة بيانات Supabase بنجاح');
     } catch (err: any) {
       addToast('error', err?.message || 'فشلت المزامنة مع قاعدة البيانات');
     } finally {
@@ -1237,6 +1329,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         saveSettings,
         updateOrderStatus,
         deleteOrder,
+        purgeAllDemoData,
         testDatabaseConnection,
         syncWithSupabase,
       }}

@@ -23,14 +23,14 @@ export const CategoriesFilter: React.FC = () => {
           onClick={() => setSelectedCategoryId('all')}
           className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer shrink-0 ${
             selectedCategoryId === 'all'
-              ? 'bg-rose-600 text-white shadow-sm shadow-rose-200'
-              : 'bg-white text-slate-700 hover:text-slate-900 hover:bg-rose-50/50 border border-slate-200/80'
+              ? 'bg-emerald-900 text-amber-300 shadow-sm shadow-emerald-950/20 border border-emerald-800'
+              : 'bg-white text-slate-700 hover:text-slate-900 hover:bg-emerald-50/50 border border-slate-200/80'
           }`}
         >
-          <LayoutGrid className="w-4 h-4" />
+          <LayoutGrid className="w-4 h-4 text-amber-400" />
           <span>{isAr ? 'جميع المعروضات' : 'All Catalog'}</span>
           <span className={`text-[11px] px-1.5 py-0.5 rounded-md ${
-            selectedCategoryId === 'all' ? 'bg-rose-700/60 text-white' : 'bg-slate-100 text-slate-500'
+            selectedCategoryId === 'all' ? 'bg-emerald-950 text-amber-300' : 'bg-slate-100 text-slate-500'
           }`}>
             {products.filter((p) => !p.is_archived).length}
           </span>
@@ -47,14 +47,14 @@ export const CategoriesFilter: React.FC = () => {
               onClick={() => setSelectedCategoryId(cat.id)}
               className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer shrink-0 ${
                 isSelected
-                  ? 'bg-rose-600 text-white shadow-sm shadow-rose-200'
-                  : 'bg-white text-slate-700 hover:text-slate-900 hover:bg-rose-50/50 border border-slate-200/80'
+                  ? 'bg-emerald-900 text-amber-300 shadow-sm shadow-emerald-950/20 border border-emerald-800'
+                  : 'bg-white text-slate-700 hover:text-slate-900 hover:bg-emerald-50/50 border border-slate-200/80'
               }`}
             >
               {CATEGORY_ICONS[cat.icon] || <Flower2 className="w-4 h-4" />}
               <span>{isAr ? cat.name_ar : cat.name_en}</span>
               <span className={`text-[11px] px-1.5 py-0.5 rounded-md ${
-                isSelected ? 'bg-rose-700/60 text-white' : 'bg-slate-100 text-slate-500'
+                isSelected ? 'bg-emerald-950 text-amber-300' : 'bg-slate-100 text-slate-500'
               }`}>
                 {count}
               </span>
