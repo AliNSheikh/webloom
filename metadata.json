@@ -1,0 +1,6 @@
+{
+  "name": "زهور حماة | Hama Flowers Boutique",
+  "description": "منصة التجارة الإلكترونية الراقية لمتجر زهور حماة المتخصص في الباقات والتنسيقات الفنية، مع طلب باقة مخصصة، والطلب عبر واتساب، ولوحة تحكم متصلة بـ Supabase.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

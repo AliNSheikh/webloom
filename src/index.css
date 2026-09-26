@@ -1,0 +1,73 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-heading: 'Fustat', 'Cairo', sans-serif;
+    --font-body: 'Cairo', 'Plus Jakarta Sans', sans-serif;
+    --font-serif: 'Amiri', serif;
+  }
+
+  body {
+    font-family: var(--font-body);
+    background-color: #fcf8f9;
+    color: #181e23;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    letter-spacing: -0.01em;
+  }
+}
+
+/* Glassmorphism subtle surface */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(241, 245, 249, 0.9);
+}
+
+/* Smooth custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f8fafc;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Horizontal Continuous Ticker Marquee for Top Announcement Bar */
+@keyframes marquee-scroll {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-ticker {
+  display: inline-flex;
+  white-space: nowrap;
+  width: max-content;
+  will-change: transform;
+  animation: marquee-scroll 26s linear infinite;
+}
+
+.animate-ticker:hover {
+  animation-play-state: paused;
+}
