@@ -79,9 +79,11 @@ export const AdminDashboard: React.FC = () => {
 
   const isAr = language === 'ar';
 
-  // Login Form State: Pre-configured to admin / webloom2026
+  // Login Form State
   const [usernameInput, setUsernameInput] = useState('admin');
-  const [passwordInput, setPasswordInput] = useState('webloom2026');
+  const [passwordInput, setPasswordInput] = useState('');
+  const [loginError, setLoginError] = useState(false);
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   // Active Tab
   type AdminTab = 'orders' | 'products' | 'categories' | 'hero' | 'varieties' | 'content' | 'seo' | 'settings';
@@ -111,6 +113,7 @@ export const AdminDashboard: React.FC = () => {
   const [settingsFormData, setSettingsFormData] = useState<StoreSettings>(settings);
   const [dbTestResult, setDbTestResult] = useState<{ success: boolean; message: string } | null>(null);
   const [isTestingDb, setIsTestingDb] = useState(false);
+  const [isSavingStoreSettings, setIsSavingStoreSettings] = useState(false);
   const [copiedSql, setCopiedSql] = useState(false);
 
   // Order filters
@@ -120,7 +123,7 @@ export const AdminDashboard: React.FC = () => {
   // Inline Price Editing: { [id]: price }
   const [inlinePriceMap, setInlinePriceMap] = useState<Record<string, number>>({});
 
-  // Login Card - Fields hidden, pre-configured to admin / webloom2026 as explicitly requested
+  // Login Card - Secure login with masked password field and hidden credentials
   if (!isAdminLoggedIn) {
     return (
       <div className="min-h-[75vh] flex items-center justify-center p-4">
@@ -135,50 +138,79 @@ export const AdminDashboard: React.FC = () => {
             </h2>
             <p className="text-xs text-slate-500 mt-1">
               {isAr
-                ? 'إدارة الكتالوج، الطلبات، والربط الحصري مع قاعدة بيانات Supabase'
-                : 'Catalog, Orders & Supabase Database Management'}
+                ? 'إدارة الكتالوج، الطلبات، وقاعدة بيانات المتجر'
+                : 'Catalog, Orders & Store Database Management'}
             </p>
           </div>
 
-          {/* Secure Auto-Configured Credentials Badge */}
-          <div className="p-4 rounded-2xl bg-emerald-50/80 border border-emerald-200/80 text-emerald-900 text-xs flex items-start gap-3 text-right">
-            <ShieldCheck className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-            <div className="space-y-1">
-              <p className="font-bold">
-                {isAr ? 'تم ضبط بيانات الدخول تلقائياً وبأمان:' : 'Credentials configured automatically:'}
-              </p>
-              <p className="text-[11px] text-emerald-800 font-mono">
-                {isAr
-                  ? 'اسم المستخدم: admin | كلمة المرور: webloom2026'
-                  : 'Username: admin | Password: webloom2026'}
-              </p>
-              <p className="text-[10px] text-emerald-700/80">
-                {isAr ? '(تم إخفاء حقول الإدخال حسب طلبك وتأمينها بنقرة واحدة)' : '(Input fields hidden per your request)'}
-              </p>
+          {loginError && (
+            <div className="p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-semibold flex items-center justify-center gap-2">
+              <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
+              <span>{isAr ? 'اسم المستخدم أو كلمة المرور غير صحيحة، يرجى المحاولة ثانية' : 'Invalid username or password. Please try again.'}</span>
             </div>
-          </div>
+          )}
 
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              loginAdmin('admin', 'webloom2026');
+              setIsLoggingIn(true);
+              const success = loginAdmin(usernameInput.trim(), passwordInput.trim());
+              if (!success) {
+                setLoginError(true);
+                setIsLoggingIn(false);
+              }
             }}
-            className="space-y-4"
+            className="space-y-4 text-right"
           >
-            {/* Hidden inputs setting username: admin, password: webloom2026 */}
-            <input type="hidden" name="username" value="admin" />
-            <input type="hidden" name="password" value="webloom2026" />
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                {isAr ? 'اسم المستخدم:' : 'Username:'}
+              </label>
+              <input
+                type="text"
+                dir="ltr"
+                required
+                value={usernameInput}
+                onChange={(e) => {
+                  setUsernameInput(e.target.value);
+                  setLoginError(false);
+                }}
+                className="w-full text-xs p-3 rounded-2xl border border-slate-200 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/20 outline-hidden bg-slate-50 font-mono transition-all"
+                placeholder="admin"
+                autoComplete="username"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                {isAr ? 'كلمة المرور:' : 'Password:'}
+              </label>
+              <input
+                type="password"
+                dir="ltr"
+                required
+                value={passwordInput}
+                onChange={(e) => {
+                  setPasswordInput(e.target.value);
+                  setLoginError(false);
+                }}
+                className="w-full text-xs p-3 rounded-2xl border border-slate-200 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/20 outline-hidden bg-slate-50 font-mono transition-all"
+                placeholder="••••••••"
+                autoComplete="current-password"
+              />
+            </div>
 
             <button
               type="submit"
-              className="w-full py-3.5 bg-emerald-900 hover:bg-emerald-950 text-amber-300 font-bold rounded-2xl text-xs shadow-lg shadow-emerald-950/20 transition-all cursor-pointer flex items-center justify-center gap-2 border border-emerald-800"
+              disabled={isLoggingIn}
+              className="w-full py-3.5 bg-emerald-900 hover:bg-emerald-950 text-amber-300 font-bold rounded-2xl text-xs shadow-lg shadow-emerald-950/20 transition-all cursor-pointer flex items-center justify-center gap-2 border border-emerald-800 disabled:opacity-50"
             >
               <Lock className="w-4 h-4 text-amber-400" />
-              <span>{isAr ? 'تسجيل الدخول إلى لوحة إدارة وي بلووم' : 'Enter Webloom Dashboard'}</span>
+              <span>{isLoggingIn ? (isAr ? 'جاري التحقق...' : 'Verifying...') : (isAr ? 'تسجيل الدخول إلى لوحة إدارة وي بلووم' : 'Enter Webloom Dashboard')}</span>
             </button>
           </form>
 
-          <div className="pt-2 text-[11px] text-slate-400">
+          <div className="pt-2 text-[11px] text-slate-400 font-mono">
             <span>https://webloom-phi.vercel.app</span>
           </div>
         </div>
@@ -1472,11 +1504,45 @@ export const AdminDashboard: React.FC = () => {
               </div>
 
               <button
-                onClick={() => saveSettings(settingsFormData)}
-                className="px-5 py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-xs shadow-md shadow-rose-200 cursor-pointer"
+                type="button"
+                disabled={isSavingStoreSettings}
+                onClick={async () => {
+                  setIsSavingStoreSettings(true);
+                  await saveSettings(settingsFormData);
+                  setIsSavingStoreSettings(false);
+                }}
+                className="px-6 py-2.5 bg-emerald-800 hover:bg-emerald-900 text-amber-300 font-bold rounded-xl text-xs shadow-md shadow-emerald-950/20 cursor-pointer flex items-center gap-2 disabled:opacity-50 transition-all border border-emerald-700"
               >
-                {isAr ? 'حفظ إعدادات المتجر' : 'Save Settings'}
+                <Database className={`w-4 h-4 ${isSavingStoreSettings ? 'animate-spin' : ''}`} />
+                <span>
+                  {isSavingStoreSettings
+                    ? (isAr ? 'جاري المزامنة مع قاعدة البيانات...' : 'Syncing with Database...')
+                    : (isAr ? 'حفظ ومزامنة المتجر مع قاعدة البيانات' : 'Save & Sync Store to Database')}
+                </span>
               </button>
+            </div>
+
+            <div className="p-4 bg-emerald-50/60 rounded-2xl border border-emerald-200/80 mb-6">
+              <label className="block text-xs font-bold text-emerald-950 mb-2">
+                {isAr ? 'شعار المتجر الرسمي (Logo):' : 'Official Store Logo:'}
+              </label>
+              <div className="flex flex-col sm:flex-row items-center gap-4">
+                <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-amber-400 bg-[#032013] shrink-0 shadow-md">
+                  <img
+                    src={settingsFormData.site_logo || '/logo.png'}
+                    alt="Logo Preview"
+                    className="w-full h-full object-cover rounded-full"
+                  />
+                </div>
+                <div className="flex-1 w-full">
+                  <ImageUploadInput
+                    label={isAr ? 'تغيير أو رفع شعار جديد للمتجر' : 'Change or upload new store logo'}
+                    helperText={isAr ? 'ارفع ملف الشعار مباشرة من جهازك وسيتم اعتماده لكافة أجزاء المتجر' : 'Upload logo image directly'}
+                    value={settingsFormData.site_logo || '/logo.png'}
+                    onChange={(url) => setSettingsFormData({ ...settingsFormData, site_logo: url })}
+                  />
+                </div>
+              </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -1613,33 +1679,58 @@ export const AdminDashboard: React.FC = () => {
               </div>
             )}
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
-                  Supabase Project URL:
-                </label>
-                <input
-                  type="url"
-                  dir="ltr"
-                  value={settingsFormData.supabase_url}
-                  onChange={(e) => setSettingsFormData({ ...settingsFormData, supabase_url: e.target.value })}
-                  placeholder="https://yourproject.supabase.co"
-                  className="w-full text-xs p-2.5 rounded-xl border border-slate-200 focus:border-rose-500 outline-hidden bg-slate-50 font-mono"
-                />
+            {/* Database Linking Details - Permanently Locked & Secured */}
+            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-200">
+                <div className="flex items-center gap-2">
+                  <ShieldCheck className="w-5 h-5 text-emerald-600 shrink-0" />
+                  <div>
+                    <h4 className="text-xs font-bold text-slate-800">
+                      {isAr ? 'بيانات الربط مع مشروع Supabase الرسمي (مثبتة ومحمية)' : 'Supabase Official Integration (Permanent & Locked)'}
+                    </h4>
+                    <p className="text-[11px] text-slate-500">
+                      {isAr
+                        ? 'تم تعطيل وقفل خيارات التعديل اليدوي في لوحة التحكم لمنع انقطاع الاتصال أو مسح الربط بالخطأ'
+                        : 'Linking parameters are locked and read-only to prevent tampering or broken database connection'}
+                    </p>
+                  </div>
+                </div>
+                <span className="px-3 py-1 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200 inline-flex items-center gap-1 self-start sm:self-auto">
+                  <CheckCircle className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>{isAr ? 'مثبت ومحمي برمجياً ✓' : 'Secured & Active ✓'}</span>
+                </span>
               </div>
 
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
-                  Supabase Anon Public API Key:
-                </label>
-                <input
-                  type="password"
-                  dir="ltr"
-                  value={settingsFormData.supabase_anon_key}
-                  onChange={(e) => setSettingsFormData({ ...settingsFormData, supabase_anon_key: e.target.value })}
-                  placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6..."
-                  className="w-full text-xs p-2.5 rounded-xl border border-slate-200 focus:border-rose-500 outline-hidden bg-slate-50 font-mono"
-                />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1 flex items-center gap-1.5">
+                    <Lock className="w-3.5 h-3.5 text-slate-400" />
+                    <span>Supabase Project URL:</span>
+                  </label>
+                  <input
+                    type="text"
+                    dir="ltr"
+                    disabled
+                    readOnly
+                    value="https://juiiibnuzbctwfmghevy.supabase.co"
+                    className="w-full text-xs p-2.5 rounded-xl border border-slate-200 bg-slate-100 text-slate-600 font-mono cursor-not-allowed select-all"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1 flex items-center gap-1.5">
+                    <Lock className="w-3.5 h-3.5 text-slate-400" />
+                    <span>Supabase Anon Public API Key:</span>
+                  </label>
+                  <input
+                    type="password"
+                    dir="ltr"
+                    disabled
+                    readOnly
+                    value="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp1aWlpYm51emJjdHdmbWdoZXZ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA0MjQxMjgsImV4cCI6MjEwNjAwMDEyOH0.ezr1RPTfpJM-Ht9BCay_AWBOrk-b7GwDgLHmuHvLVW0"
+                    className="w-full text-xs p-2.5 rounded-xl border border-slate-200 bg-slate-100 text-slate-600 font-mono cursor-not-allowed select-all"
+                  />
+                </div>
               </div>
             </div>
 

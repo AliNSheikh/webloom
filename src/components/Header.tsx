@@ -105,7 +105,7 @@ export const Header: React.FC = () => {
                 navigateTo('home');
               }}
               className="group flex items-center cursor-pointer transition-transform"
-              aria-label="وي بلووم | Webloom"
+              aria-label="وي بلووم"
             >
               <Logo size="md" />
             </a>

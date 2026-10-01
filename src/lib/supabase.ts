@@ -11,6 +11,10 @@ const STORAGE_KEY_HERO_SLIDES = 'webloom_hero_slides_v3';
 const STORAGE_KEY_VARIETIES = 'webloom_varieties_v3';
 const STORAGE_KEY_SITE_CONTENT = 'webloom_site_content_v3';
 
+export const DEFAULT_SUPABASE_URL = 'https://juiiibnuzbctwfmghevy.supabase.co';
+export const DEFAULT_SUPABASE_ANON_KEY =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp1aWlpYm51emJjdHdmbWdoZXZ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA0MjQxMjgsImV4cCI6MjEwNjAwMDEyOH0.ezr1RPTfpJM-Ht9BCay_AWBOrk-b7GwDgLHmuHvLVW0';
+
 let activeSupabaseClient: SupabaseClient | null = null;
 
 export function getSupabaseClient(url?: string, key?: string): SupabaseClient | null {
@@ -26,7 +30,7 @@ export function getSupabaseClient(url?: string, key?: string): SupabaseClient | 
         process.env.SUPABASE_URL ||
         process.env.NEXT_PUBLIC_SUPABASE_URL
       : '') ||
-    '';
+    DEFAULT_SUPABASE_URL;
 
   const targetKey =
     key ||
@@ -40,7 +44,7 @@ export function getSupabaseClient(url?: string, key?: string): SupabaseClient | 
         process.env.SUPABASE_ANON_KEY ||
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
       : '') ||
-    '';
+    DEFAULT_SUPABASE_ANON_KEY;
 
   if (!targetUrl || !targetKey) {
     activeSupabaseClient = null;

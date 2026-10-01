@@ -16,7 +16,7 @@ export const Footer: React.FC = () => {
           {/* Brand Info */}
           <div className="space-y-4">
             <div className="flex items-center gap-2.5">
-              <Logo size="md" />
+              <Logo size="md" inverted />
             </div>
             <p className="text-xs text-emerald-100/70 leading-relaxed">
               {isAr

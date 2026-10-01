@@ -552,13 +552,14 @@ export const INITIAL_SETTINGS: StoreSettings = {
   address_ar: 'بوتيك وي بلووم (Webloom) للباقات والزهور الفاخرة',
   address_en: 'Webloom Luxury Floral Boutique',
   admin_username: 'admin',
-  admin_password: 'webloom2026',
-  supabase_url: '',
-  supabase_anon_key: '',
+  admin_password: 'Webloom@2026',
+  supabase_url: 'https://juiiibnuzbctwfmghevy.supabase.co',
+  supabase_anon_key: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp1aWlpYm51emJjdHdmbWdoZXZ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA0MjQxMjgsImV4cCI6MjEwNjAwMDEyOH0.ezr1RPTfpJM-Ht9BCay_AWBOrk-b7GwDgLHmuHvLVW0',
   announcement_text_ar: '🌸 باقات زهور طبيعية فاخرة من وي بلووم | طلبات خاصة عبر واتساب مع تصميم باقتك بلمستك',
   announcement_text_en: '🌸 Fresh luxury floral arrangements by Webloom | Custom bouquet crafting via WhatsApp',
   announcement_enabled: true,
   exchange_rate_usd_syp: 14500,
+  site_logo: '/logo.png',
   updated_at: new Date().toISOString(),
 };
 

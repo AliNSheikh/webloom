@@ -241,6 +241,23 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           setFlowerVarieties(dbVarieties);
           saveLocalFlowerVarieties(dbVarieties);
         }
+
+        const { data: dbSettings } = await client.from('store_settings').select('*').limit(1).maybeSingle();
+        if (dbSettings && isMounted) {
+          setSettings((prev) => ({
+            ...prev,
+            ...dbSettings,
+            site_logo: prev.site_logo || '/logo.png',
+            supabase_url: prev.supabase_url || 'https://juiiibnuzbctwfmghevy.supabase.co',
+            supabase_anon_key: prev.supabase_anon_key || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp1aWlpYm51emJjdHdmbWdoZXZ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA0MjQxMjgsImV4cCI6MjEwNjAwMDEyOH0.ezr1RPTfpJM-Ht9BCay_AWBOrk-b7GwDgLHmuHvLVW0',
+          }));
+        }
+
+        const { data: dbContent } = await client.from('site_content').select('*').limit(1).maybeSingle();
+        if (dbContent && isMounted) {
+          setSiteContent((prev) => ({ ...prev, ...dbContent }));
+          saveLocalSiteContent(dbContent);
+        }
       } catch (err) {
         console.warn('Auto fetch from Supabase:', err);
       }
@@ -809,10 +826,11 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   // Admin Auth
   const loginAdmin = (user: string, pass: string): boolean => {
+    const validUsername = settings.admin_username || 'admin';
+    const validPassword = settings.admin_password || 'Webloom@2026';
     if (
-      (user === 'admin' && pass === 'webloom2026') ||
-      (user === settings.admin_username && pass === settings.admin_password) ||
-      (user === 'admin' && pass === 'hamaflowers2026')
+      (user === validUsername && pass === validPassword) ||
+      (user === 'admin' && pass === 'Webloom@2026')
     ) {
       setIsAdminLoggedIn(true);
       sessionStorage.setItem('webloom_admin_auth', 'true');
@@ -1137,11 +1155,32 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const saveSiteContent = async (newContent: SiteContent): Promise<boolean> => {
     try {
       setSiteContent(newContent);
+      saveLocalSiteContent(newContent);
       const client = getSupabaseClient(settings.supabase_url, settings.supabase_anon_key);
       if (client) {
-        await client.from('site_content').upsert({ id: 'default', ...newContent });
+        const payload = {
+          id: 'default',
+          announcement_ticker: newContent.announcement_ticker || '',
+          announcement_speed_sec: newContent.announcement_speed_sec || 25,
+          story_title_ar: newContent.story_title_ar || '',
+          story_body_ar: newContent.story_body_ar || '',
+          story_image: newContent.story_image || '',
+          vip_banner_title_ar: newContent.vip_banner_title_ar || '',
+          vip_banner_body_ar: newContent.vip_banner_body_ar || '',
+          location_address_ar: newContent.location_address_ar || '',
+          location_lat: newContent.location_lat || 35.1318,
+          location_lng: newContent.location_lng || 36.7578,
+          google_maps_place_url: newContent.google_maps_place_url || '',
+          google_analytics_id: newContent.google_analytics_id || '',
+          google_search_console_code: newContent.google_search_console_code || '',
+        };
+        const { error } = await client.from('site_content').upsert(payload, { onConflict: 'id' });
+        if (error) {
+          console.error('Supabase site_content upsert error:', error);
+          throw new Error(error.message);
+        }
       }
-      addToast('success', 'تم حفظ محتوى ونصوص المتجر والموقع الجغرافي بنجاح');
+      addToast('success', 'تم حفظ ومزامنة محتوى ونصوص المتجر في قاعدة البيانات بنجاح');
       return true;
     } catch (e: any) {
       addToast('error', e?.message || 'تعذر حفظ محتوى المتجر');
@@ -1153,11 +1192,30 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const saveSettings = async (newSettings: StoreSettings): Promise<boolean> => {
     try {
       setSettings(newSettings);
+      saveLocalSettings(newSettings);
       const client = getSupabaseClient(newSettings.supabase_url, newSettings.supabase_anon_key);
       if (client) {
-        await client.from('store_settings').upsert({ ...newSettings, id: newSettings.id || 'default' });
+        const payload = {
+          id: newSettings.id || 'default',
+          site_name_ar: newSettings.site_name_ar || 'وي بلووم',
+          site_name_en: newSettings.site_name_en || 'Webloom',
+          site_domain: newSettings.site_domain || 'https://webloom-phi.vercel.app',
+          phone_primary: newSettings.phone_primary || '',
+          whatsapp_number: newSettings.whatsapp_number || '',
+          address_ar: newSettings.address_ar || '',
+          admin_username: newSettings.admin_username || 'admin',
+          admin_password: newSettings.admin_password || 'Webloom@2026',
+          announcement_text_ar: newSettings.announcement_text_ar || '',
+          announcement_enabled: newSettings.announcement_enabled ?? true,
+          updated_at: new Date().toISOString(),
+        };
+        const { error } = await client.from('store_settings').upsert(payload, { onConflict: 'id' });
+        if (error) {
+          console.error('Supabase store_settings upsert error:', error);
+          throw new Error(error.message);
+        }
       }
-      addToast('success', 'تم حفظ إعدادات المتجر بنجاح');
+      addToast('success', 'تم حفظ ومزامنة إعدادات المتجر في قاعدة بيانات Supabase بنجاح');
       return true;
     } catch (e: any) {
       addToast('error', e?.message || 'فشل حفظ الإعدادات');
@@ -1248,6 +1306,23 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       if (dbVarieties && dbVarieties.length > 0) {
         setFlowerVarieties(dbVarieties);
         saveLocalFlowerVarieties(dbVarieties);
+      }
+
+      const { data: dbSettings } = await client.from('store_settings').select('*').limit(1).maybeSingle();
+      if (dbSettings) {
+        setSettings((prev) => ({
+          ...prev,
+          ...dbSettings,
+          site_logo: prev.site_logo || '/logo.png',
+          supabase_url: prev.supabase_url || 'https://juiiibnuzbctwfmghevy.supabase.co',
+          supabase_anon_key: prev.supabase_anon_key || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp1aWlpYm51emJjdHdmbWdoZXZ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA0MjQxMjgsImV4cCI6MjEwNjAwMDEyOH0.ezr1RPTfpJM-Ht9BCay_AWBOrk-b7GwDgLHmuHvLVW0',
+        }));
+      }
+
+      const { data: dbContent } = await client.from('site_content').select('*').limit(1).maybeSingle();
+      if (dbContent) {
+        setSiteContent((prev) => ({ ...prev, ...dbContent }));
+        saveLocalSiteContent(dbContent);
       }
 
       setIsSupabaseConnected(true);

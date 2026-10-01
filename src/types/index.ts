@@ -112,6 +112,7 @@ export interface StoreSettings {
   announcement_text_en: string;
   announcement_enabled: boolean;
   exchange_rate_usd_syp: number;
+  site_logo?: string;
   updated_at: string;
 }
 
